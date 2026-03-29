@@ -44,3 +44,17 @@ DigitalNet ISP — Tashkent, Uzbekistan
 - Network troubleshooting and VPN setup (OpenVPN, WireGuard)
 - Technical support for company employees and clients
 - Daily backup management and monitoring
+
+## Education
+**Bachelor's Degree in Information Technology**  
+Tashkent University of Information Technologies  
+*2017 – 2021*
+
+**Additional Certifications & Courses:**
+- Linux Administration Essentials (2022)
+- Zabbix Monitoring System (2023)
+- Basics of Ansible Automation (2024)
+- CCNA (in progress)
+
+## English
+**Level:** B1 (Intermediate)
