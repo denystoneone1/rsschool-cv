@@ -108,6 +108,102 @@
 						</ul>
 					</article>
 				</section>
+				<!-- Code Example -->
+				<section class="code-example" id="code">
+					<h2>Code Example</h2>
+					<p>Full Backup Script:</p>
+					<pre><code>#!/usr/bin/env bash
+
+set -euo pipefail
+
+# =========================
+# CONFIG
+# =========================
+SOURCE="/home"
+DEST="/backup"
+LOG_FILE="/var/log/backup.log"
+RETENTION_DAYS=7
+
+# Exclusions (edit as needed)
+EXCLUDES=(
+    "/proc"
+    "/sys"
+    "/dev"
+    "/tmp"
+    "/run"
+    "/mnt"
+    "/media"
+    "/lost+found"
+)
+
+# =========================
+# INIT
+# =========================
+TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
+BACKUP_DIR="$DEST/$TIMESTAMP"
+LATEST_LINK="$DEST/latest"
+
+mkdir -p "$DEST"
+mkdir -p "$BACKUP_DIR"
+
+echo "[$(date)] Starting backup..." >> "$LOG_FILE"
+
+# =========================
+# BUILD EXCLUDE PARAMS
+# =========================
+RSYNC_EXCLUDES=()
+for EX in "${EXCLUDES[@]}"; do
+    RSYNC_EXCLUDES+=(--exclude="$EX")
+done
+
+# =========================
+# RUN RSYNC (incremental)
+# =========================
+if [ -d "$LATEST_LINK" ]; then
+    LINK_DEST="--link-dest=$LATEST_LINK"
+else
+    LINK_DEST=""
+fi
+
+rsync -aAXv \
+    --delete \
+    "${RSYNC_EXCLUDES[@]}" \
+    $LINK_DEST \
+    "$SOURCE/" "$BACKUP_DIR/" >> "$LOG_FILE" 2>&1
+
+# =========================
+# UPDATE SYMLINK
+# =========================
+rm -f "$LATEST_LINK"
+ln -s "$BACKUP_DIR" "$LATEST_LINK"
+
+# =========================
+# CLEAN OLD BACKUPS
+# =========================
+find "$DEST" -maxdepth 1 -type d -mtime +$RETENTION_DAYS -exec rm -rf {} \; >> "$LOG_FILE" 2>&1 || true
+
+echo "[$(date)] Backup completed: $BACKUP_DIR" >> "$LOG_FILE"</code></pre>
+				</section>
+
+				<!-- Education -->
+				<section class="education" id="education">
+					<h2>Education &amp; English</h2>
+					<p>
+						<strong>Bachelor's Degree in Information Technology</strong><br />
+						Tashkent University of Information Technologies, 2017 – 2021
+					</p>
+
+					<p>
+						<strong>Additional Courses:</strong><br />
+						Linux Administration Essentials (2022), Zabbix Monitoring (2023),
+						Basics of Ansible Automation (2024), CCNA (in progress)
+					</p>
+
+					<p>
+						<strong>English:</strong> B1 (Intermediate) — able to read technical
+						documentation and communicate in professional environment.
+					</p>
+				</section>
 			</main>
 		</div>
 	</body>
