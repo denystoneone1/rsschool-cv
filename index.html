@@ -1,40 +1,222 @@
-<!DOCTYPE HTML>
+<!doctype html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Alex Gl - System Administrator</title>
-	<link rel="stylesheet" href="style.css">
-</head>
-<body>
-	<main class="main">
-			<section>
-				<h2>About Me</h2>
-				<p>
-					Experienced System Administrator with focus on Linux, Windows servers,
-					automation and monitoring.
-				</p>
-			</section>
-
-			<section>
-				<h2>Skills</h2>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Alex Gl - System Administrator</title>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<div class="container">
+			<header class="header">
+				<img
+					class="avatar"
+					src="https://avavatar.ru/images/content/8/avavatar.ru-video_game-game_character-7025.webp"
+					alt="Alexander Gl photo"
+				/>
+				<h1>Alexander Gl</h1>
+				<p class="title">System Administrator</p>
+			</header>
+			<nav class="menu">
 				<ul>
-					<li>Linux Administration</li>
-					<li>Windows Server</li>
-					<li>Docker and Virtualization</li>
-					<li>Bash Scripting</li>
-					<li>Zabbix/Prometheus</li>
+					<li><a href="#contacts">Contacts</a></li>
+					<li><a href="#about">About Me</a></li>
+					<li><a href="#skills">Skills</a></li>
+					<li><a href="#experience">Experience</a></li>
+					<li><a href="#code">Code Example</a></li>
+					<li><a href="#education">Education</a></li>
 				</ul>
-			</section>
+			</nav>
+			<main class="main">
+				<!-- Contacts -->
+				<section class="contacts" id="contacts">
+					<h2>Contacts</h2>
+					<ul>
+						<li><strong>Location:</strong> Tashkent, Uzbekistan</li>
+						<li><strong>Email:</strong> alex.gl@example.com</li>
+						<li><strong>Phone:</strong> +998 90 123 45 67</li>
+						<li>
+							<strong>GitHub:</strong>
+							<a href="https://github.com/alexgl" target="_blank"
+								>github.com/alexgl</a
+							>
+						</li>
+						<li><strong>Discord:</strong> alexgl#3344</li>
+					</ul>
+				</section>
+				<!-- About -->
+				<section class="about" id="about">
+					<h2>About Me</h2>
+					<p>
+						Dedicated System Administrator with 4+ years of experience in
+						managing Linux and Windows server infrastructure. Passionate about
+						automation, system reliability, monitoring and cybersecurity.
+					</p>
+				</section>
 
-			<section>
-				<h2>Experience</h2>
-				<p>System Administrator at TechSolutions LLC (2023 - Present)</p>
-			</section>
-		</main>
+				<!-- Skills -->
+				<section class="skills" id="skills">
+					<h2>Skills</h2>
+					<ul>
+						<li>Linux (Ubuntu, Rocky Linux, Debian, CentOS)</li>
+						<li>Windows Server 2016/2019/2022</li>
+						<li>Proxmox VE, VMware ESXi, Docker, Docker Compose</li>
+						<li>Bash, PowerShell, Ansible (basics), Python scripting</li>
+						<li>Zabbix, Prometheus, Grafana, ELK Stack</li>
+						<li>MikroTik, Cisco, OpenVPN, WireGuard, iptables</li>
+						<li>Nginx, Apache, Active Directory, MySQL, PostgreSQL</li>
+						<li>Git, Backup systems (rsync, BorgBackup)</li>
+					</ul>
+				</section>
 
-		<footer class="footer">
-			<p>CV#2 - HTML and CSS Basics</p>
-		</footer>
-</body>
+				<!-- Experience -->
+				<section class="experience" id="experience">
+					<h2>Work Experience</h2>
+
+					<article>
+						<h3>System Administrator — TechSolutions LLC</h3>
+						<p class="date">March 2023 – Present</p>
+						<ul>
+							<li>
+								Administration and support of 70+ physical and virtual servers
+							</li>
+							<li>
+								Deployment and maintenance of Zabbix monitoring system for 150+
+								hosts
+							</li>
+							<li>Automation of routine tasks using Bash and Ansible</li>
+							<li>Network infrastructure management (MikroTik)</li>
+							<li>
+								Implementation of backup strategy and disaster recovery tests
+							</li>
+						</ul>
+					</article>
+
+					<article>
+						<h3>Junior System Administrator — DigitalNet ISP</h3>
+						<p class="date">June 2021 – February 2023</p>
+						<ul>
+							<li>
+								Installation, configuration and maintenance of Linux and Windows
+								servers
+							</li>
+							<li>User account management in Active Directory</li>
+							<li>
+								Network troubleshooting and VPN setup (OpenVPN, WireGuard)
+							</li>
+							<li>Technical support for employees and clients</li>
+						</ul>
+					</article>
+				</section>
+				<!-- Code Example -->
+				<section class="code-example" id="code">
+					<h2>Code Example</h2>
+					<p>Full Backup Script:</p>
+					<pre><code>#!/usr/bin/env bash
+
+set -euo pipefail
+
+# =========================
+# CONFIG
+# =========================
+SOURCE="/home"
+DEST="/backup"
+LOG_FILE="/var/log/backup.log"
+RETENTION_DAYS=7
+
+# Exclusions (edit as needed)
+EXCLUDES=(
+    "/proc"
+    "/sys"
+    "/dev"
+    "/tmp"
+    "/run"
+    "/mnt"
+    "/media"
+    "/lost+found"
+)
+
+# =========================
+# INIT
+# =========================
+TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
+BACKUP_DIR="$DEST/$TIMESTAMP"
+LATEST_LINK="$DEST/latest"
+
+mkdir -p "$DEST"
+mkdir -p "$BACKUP_DIR"
+
+echo "[$(date)] Starting backup..." >> "$LOG_FILE"
+
+# =========================
+# BUILD EXCLUDE PARAMS
+# =========================
+RSYNC_EXCLUDES=()
+for EX in "${EXCLUDES[@]}"; do
+    RSYNC_EXCLUDES+=(--exclude="$EX")
+done
+
+# =========================
+# RUN RSYNC (incremental)
+# =========================
+if [ -d "$LATEST_LINK" ]; then
+    LINK_DEST="--link-dest=$LATEST_LINK"
+else
+    LINK_DEST=""
+fi
+
+rsync -aAXv \
+    --delete \
+    "${RSYNC_EXCLUDES[@]}" \
+    $LINK_DEST \
+    "$SOURCE/" "$BACKUP_DIR/" >> "$LOG_FILE" 2>&1
+
+# =========================
+# UPDATE SYMLINK
+# =========================
+rm -f "$LATEST_LINK"
+ln -s "$BACKUP_DIR" "$LATEST_LINK"
+
+# =========================
+# CLEAN OLD BACKUPS
+# =========================
+find "$DEST" -maxdepth 1 -type d -mtime +$RETENTION_DAYS -exec rm -rf {} \; >> "$LOG_FILE" 2>&1 || true
+
+echo "[$(date)] Backup completed: $BACKUP_DIR" >> "$LOG_FILE"</code></pre>
+				</section>
+
+				<!-- Education -->
+				<section class="education" id="education">
+					<h2>Education &amp; English</h2>
+					<p>
+						<strong>Bachelor's Degree in Information Technology</strong><br />
+						Tashkent University of Information Technologies, 2017 – 2021
+					</p>
+
+					<p>
+						<strong>Additional Courses:</strong><br />
+						Linux Administration Essentials (2022), Zabbix Monitoring (2023),
+						Basics of Ansible Automation (2024), CCNA (in progress)
+					</p>
+
+					<p>
+						<strong>English:</strong> B1 (Intermediate) — able to read technical
+						documentation and communicate in professional environment.
+					</p>
+				</section>
+			</main>
+			<footer class="footer">
+				<p>
+					© 2026 Alexander Gl •
+					<a href="https://github.com/alexgl" target="_blank">GitHub</a> •
+					<a
+						href="https://rs.school/courses/javascript-preschool-ru"
+						target="_blank"
+					>
+						<img src="/rs-school-logo.svg" alt="RS School" width="110" />
+					</a>
+				</p>
+			</footer>
+		</div>
+	</body>
 </html>
